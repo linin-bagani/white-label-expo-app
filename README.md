@@ -56,6 +56,12 @@ white-label-app/
 │   │   └── brand3/           # Brand 3 configuration
 │   └── src/                  # Shared source code
 │       └── components/       # Reusable components
+│           ├── branded/      # Brand-specific components with conditional rendering
+│           └── ui/           # Generic UI components
+├── hooks/                    # Custom React hooks (outside app dir to avoid routing conflicts)
+│   └── useBrand.ts           # Hook to determine current brand
+└── utils/                    # Utility functions (outside app dir to avoid routing conflicts)
+    └── brandUtils.ts         # Brand-specific utilities
 ├── assets/                   # Current active assets (dynamically copied)
 ```
 
@@ -97,8 +103,8 @@ Builds Brand 3 configuration and starts the development server.
 
 The app supports multiple brands through configuration files located in `app/config/`. Each brand has its own:
 
-- `app.json` - Contains brand-specific metadata (name, theme color, bundle identifier, etc.)
-- `assets/` - Brand-specific assets (icons, splash screens, etc.)
+- `app.json` - Contains brand-specific metadata (name, theme color, logo path, bundle identifier, etc.)
+- `assets/` - Brand-specific assets (icons, splash screens, logos, etc.)
 
 To add a new brand:
 1. Create a new directory in `app/config/` (e.g., `brand4`)
@@ -106,12 +112,60 @@ To add a new brand:
 3. Add a `assets/` directory with your brand assets
 4. Update `package.json` with new build scripts for your brand
 
+## 🧩 Using Branded Components
+
+The app includes a system for creating components that adapt their appearance and behavior based on the current brand:
+
+- `useBrand()` hook - Provides current brand information (name, slug, theme color)
+- `brandUtils.ts` - Utility functions for brand-specific content and API endpoints
+- `Branded*` components - Components that render differently based on the current brand
+
+Example usage:
+```typescript
+import { useBrand } from './src/hooks/useBrand';
+import { getBrandContent } from './src/utils/brandUtils';
+
+const MyComponent = () => {
+  const { brandName, themeColor, logoPath } = useBrand();
+  const { welcomeMessage } = getBrandContent(brandName);
+  
+  return (
+    <View style={{ backgroundColor: themeColor }}>
+      <Text>{welcomeMessage}</Text>
+      {logoPath && <Image source={{ uri: logoPath }} style={styles.logo} />}
+    </View>
+  );
+};
+```
+
+## 🖼️ Brand Assets Configuration
+
+To configure brand-specific assets like logos, add them to the `extra` section of each brand's `app.json`:
+
+```json
+{
+  "expo": {
+    "name": "Brand One",
+    "slug": "brand-one",
+    "extra": {
+      "themeColor": "#00FF00",
+      "logoPath": "./assets/brand1-logo.png"
+    }
+  }
+}
+```
+
 ## 📦 Dependencies
 
 - [Expo](https://expo.dev/) - Framework for universal React applications
 - [React Native](https://reactnative.dev/) - Framework for building native apps
 - [Expo Router](https://docs.expo.dev/router/introduction/) - File-based routing for React Native apps
 - [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript superset
+- [Expo Linking](https://docs.expo.dev/guides/linking/) - Deep linking capabilities
+- [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/) - Animated library for React Native
+- [React Native Web](https://github.com/necolas/react-native-web) - Compatibility layer for web
+- [React DOM](https://reactjs.org/docs/react-dom.html) - DOM-specific methods for React
+- [React Native Worklets](https://docs.swmansion.com/react-native-worklets/) - JavaScript execution runtime
 
 ## 🤝 Contributing
 

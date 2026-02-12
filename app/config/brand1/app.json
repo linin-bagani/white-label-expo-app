@@ -7,6 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "scheme": "brandone",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -29,7 +30,8 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "themeColor": "#00FF00"
+      "themeColor": "#00FF00",
+      "logoPath": "./assets/logo.svg"
     }
   }
 }
