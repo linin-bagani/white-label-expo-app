@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>White-Label App Architecture</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #ffffff;
+      color: #333;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+      color: #222;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 28px;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 6px;
+    }
+    h3 {
+      font-size: 1.25rem;
+      margin: 16px 0 8px;
+      color: #2c3e50;
+    }
+    ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+    li {
+      margin-bottom: 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+    }
+    blockquote {
+      border-left: 4px solid #007bff;
+      padding-left: 16px;
+      margin: 24px 0;
+      font-style: italic;
+      color: #555;
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
+    }
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+    .image-card {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .image-card h4 {
+      margin: 0;
+      padding: 12px 16px;
+      background-color: #f8f9fa;
+      font-size: 1.1rem;
+      border-bottom: 1px solid #eee;
+    }
+    .image-placeholder {
+      height: 200px;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      padding: 16px;
+    }
+    .image-caption {
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      color: #666;
+      background-color: #fafafa;
+    }
+    .note {
+      background-color: #e7f3ff;
+      border-left: 4px solid #007bff;
+      padding: 12px 16px;
+      margin: 20px 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .tree {
+      font-family: 'Courier New', monospace;
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 4px;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.4;
+    }
+    .tree-item {
+      margin-left: 20px;
+    }
+    .tree-root {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .diagram-container {
+      overflow: hidden;
+      margin: 30px 0;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .diagram-wrapper {
+      overflow: auto;
+      cursor: grab;
+      height: 600px;
+    }
+    .diagram-wrapper:active {
+      cursor: grabbing;
+    }
+    .diagram-wrapper img {
+      max-width: none;
+      transform-origin: 0 0;
+      transition: transform 0.1s ease-out;
+    }
+    .diagram-controls {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      display: flex;
+      gap: 8px;
+      background: rgba(255,255,255,0.95);
+      padding: 8px 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      z-index: 10;
+    }
+    .diagram-controls button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .diagram-controls button:hover {
+      background: #0056b3;
+    }
+    .diagram-controls button:active {
+      transform: scale(0.95);
+    }
+    .zoom-level {
+      display: flex;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #333;
+      font-weight: 500;
+      min-width: 50px;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏗️ White-Label App Architecture</h1>
+  <p style="text-align: center; font-size: 1.1rem; margin-bottom: 40px;">*One Codebase, Many Brands*</p>
+
+  <h2>💪 Strengths</h2>
+  <h3>1. Cost Efficiency</h3>
+  <ul>
+    <li><strong>Single Codebase</strong>: 1 app → 3+ brands (no duplication)</li>
+    <li><strong>Reduced Dev Time</strong>: New brand in hours, not months</li>
+    <li><strong>Lower Maintenance</strong>: Fix once, deploy everywhere</li>
+  </ul>
+
+  <h3>2. Scalability</h3>
+  <ul>
+    <li><strong>Easy Brand Addition</strong>: Config + assets only</li>
+    <li><strong>Consistent Quality</strong>: All brands inherit same robust core</li>
+    <li><strong>Centralized Updates</strong>: Roll out features to all brands at once</li>
+  </ul>
+
+  <h3>3. Flexibility</h3>
+  <ul>
+    <li><strong>Customizable Branding</strong>: Colors, logos, names, themes</li>
+    <li><strong>Conditional Logic</strong>: Components adapt per brand</li>
+  </ul>
+
+  <h3>4. Modern Tech Stack</h3>
+  <ul>
+    <li>React Native + Expo</li>
+    <li>TypeScript for safety</li>
+    <li>File-based routing</li>
+  </ul>
+
+  <h2>⚠️ Weaknesses</h2>
+  <h3>1. Complexity Overhead</h3>
+  <ul>
+    <li>Steeper learning curve</li>
+    <li>Brand-specific bugs hard to isolate</li>
+    <li>Config management scales poorly</li>
+  </ul>
+
+  <h3>2. Feature Limitations</h3>
+  <ul>
+    <li>“One-size-fits-all” constraint</li>
+    <li>Bloat: unused code shipped to all brands</li>
+    <li>UI/UX divergence limits</li>
+  </ul>
+
+  <h3>3. Maintenance Burden</h3>
+  <ul>
+    <li>Regression testing across brands</li>
+    <li>Dependency/version conflicts</li>
+    <li>Config drift over time</li>
+  </ul>
+
+  <h3>4. Security Concerns</h3>
+  <ul>
+    <li>Shared vulnerability surface</li>
+    <li>Risk of cross-brand config/data leakage</li>
+  </ul>
+
+  <h2>🎯 Practical Applications</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Benefit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Business Owners</strong></td>
+        <td>Launch multiple products at ~70–80% lower cost</td>
+      </tr>
+      <tr>
+        <td><strong>Developers</strong></td>
+        <td>Focus on core logic, not repetitive UI tweaks</td>
+      </tr>
+      <tr>
+        <td><strong>Agencies</strong></td>
+        <td>Scale client delivery without scaling team size</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>✅ When It Works Best</h2>
+  <ul>
+    <li>✔ Similar core functionality</li>
+    <li>✔ Branding-only differences</li>
+    <li>✔ Shared backend</li>
+    <li>✔ Budget & speed priorities</li>
+  </ul>
+
+  <h2>❌ When to Avoid</h2>
+  <ul>
+    <li>✖ Radically different features/user journeys</li>
+    <li>✖ Independent teams or strict isolation needs</li>
+    <li>✖ Conflicting tech/integration requirements</li>
+  </ul>
+
+  <h2>📱 Visual Examples: Different App Builds</h2>
+  <div class="image-grid">
+    <div class="image-card">
+      <h4>Brand 1</h4>
+      <img src="brand1-screenshot.png" alt="Brand 1 App Screenshot" style="width: 100%; height: auto; display: block;" />
+      <div class="image-caption">
+        Custom logo, primary color scheme, and branding elements specific to Brand 1
+      </div>
+    </div>
+
+    <div class="image-card">
+      <h4>Brand 2</h4>
+      <img src="brand2-screenshot.png" alt="Brand 2 App Screenshot" style="width: 100%; height: auto; display: block;" />
+      <div class="image-caption">
+        Different logo, color palette, and UI customization for Brand 2
+      </div>
+    </div>
+
+    <div class="image-card">
+      <h4>Brand 3</h4>
+      <img src="brand3-screenshot.png" alt="Brand 3 App Screenshot" style="width: 100%; height: auto; display: block;" />
+      <div class="image-caption">
+        Unique branding elements and customizations for Brand 3
+      </div>
+    </div>
+  </div>
+
+  <h2>🏗️ Architecture Diagram</h2>
+  <div class="note">
+    <strong>Mermaid Flowchart:</strong> Visual representation of the white-label app architecture showing the relationship between root files, brand configurations, and source components.
+    <br/><br/>
+    <em>💡 Tip: Drag to pan, scroll to zoom, or use the controls below.</em>
+  </div>
+  <div class="diagram-container">
+    <div class="diagram-wrapper" id="diagramWrapper">
+      <img src="architecture-diagram.svg" alt="White-Label App Architecture Diagram" id="diagramImg" />
+    </div>
+    <div class="diagram-controls">
+      <button id="zoomOut" title="Zoom Out">−</button>
+      <span class="zoom-level" id="zoomLevel">100%</span>
+      <button id="zoomIn" title="Zoom In">+</button>
+      <button id="zoomReset" title="Reset Zoom" style="margin-left: 8px; font-size: 0.85rem; padding: 8px 10px;">Reset</button>
+    </div>
+  </div>
+
+  <h2>📁 App Structure</h2>
+  <div class="tree">
+<span class="tree-root">/white-label-app</span>
+├───.git/
+├───.expo/
+├───app/
+│   ├───config/
+│   │   ├───brand1/
+│   │   │   ├───assets/
+│   │   │   │   ├───adaptive-icon.png
+│   │   │   │   ├───favicon.png
+│   │   │   │   ├───icon.png
+│   │   │   │   ├───logo.svg
+│   │   │   │   └───splash-icon.png
+│   │   │   └───app.json
+│   │   ├───brand2/
+│   │   │   └───assets/ (same files as brand1)
+│   │   └───brand3/
+│   │       └───assets/ (same files as brand1)
+│   ├───src/
+│   │   └───components/
+│   │       ├───branded/
+│   │       │   ├───BrandedButton.tsx
+│   │       │   ├───BrandedFooter.tsx
+│   │       │   └───BrandedHeader.tsx
+│   │       └───ui/ (empty)
+│   ├───_layout.tsx
+│   └───index.tsx
+├───assets/
+│   ├───adaptive-icon.png
+│   ├───favicon.png
+│   ├───icon.png
+│   ├───logo.svg
+│   └───splash-icon.png
+├───hooks/
+│   └───useBrand.ts
+├───utils/
+│   └───brandUtils.ts
+├───build-brand.js
+├───App.tsx
+├───index.ts
+├───package.json
+└───tsconfig.json
+  </div>
+
+  <h2>📲 iOS Distribution Options</h2>
+  
+  <h3>🍎 Apple Native Methods</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Cost</th>
+        <th>Link Sharing</th>
+        <th>Device Limit</th>
+        <th>App Store Review</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Unlisted App</strong></td>
+        <td>$99/yr</td>
+        <td>✅ Yes</td>
+        <td>None</td>
+        <td>✅ Required</td>
+      </tr>
+      <tr>
+        <td><strong>Ad Hoc</strong></td>
+        <td>$99/yr</td>
+        <td>❌ (file share)</td>
+        <td>100 devices</td>
+        <td>❌ Not needed</td>
+      </tr>
+      <tr>
+        <td><strong>Custom Apps (ABM)</strong></td>
+        <td>$99/yr</td>
+        <td>✅ Via codes</td>
+        <td>None</td>
+        <td>✅ Required</td>
+      </tr>
+      <tr>
+        <td><strong>TestFlight</strong></td>
+        <td>$99/yr</td>
+        <td>✅ Invite link</td>
+        <td>10,000 testers</td>
+        <td>✅ Beta review</td>
+      </tr>
+      <tr>
+        <td><strong>Enterprise</strong></td>
+        <td>$299/yr</td>
+        <td>❌ Internal only</td>
+        <td>None (employees)</td>
+        <td>❌ Not needed</td>
+      </tr>
+      <tr>
+        <td><strong>Free Xcode</strong></td>
+        <td>$0</td>
+        <td>❌ (cable only)</td>
+        <td>3 devices</td>
+        <td>❌ Not needed</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>🔧 Third-Party Distribution Services</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Best For</th>
+        <th>Tester Accounts</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Buildstash</strong></td>
+        <td>External clients/QA</td>
+        <td>❌ Not required</td>
+        <td>TBD</td>
+      </tr>
+      <tr>
+        <td><strong>Firebase App Dist.</strong></td>
+        <td>Firebase ecosystem teams</td>
+        <td>✅ Required</td>
+        <td>Free tier</td>
+      </tr>
+      <tr>
+        <td><strong>EAS (Expo)</strong></td>
+        <td>React Native/Expo apps</td>
+        <td>✅ Required</td>
+        <td>Free tier</td>
+      </tr>
+      <tr>
+        <td><strong>Applivery</strong></td>
+        <td>Enterprise/MDM needs</td>
+        <td>✅ Required</td>
+        <td>€49/mo</td>
+      </tr>
+      <tr>
+        <td><strong>Appcircle</strong></td>
+        <td>Full CI/CD replacement</td>
+        <td>✅ Required</td>
+        <td>Enterprise</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>🔒 Private Distribution Methods - Detailed Breakdown</h3>
+  
+  <h4>🍎 Apple Native Methods</h4>
+  
+  <h4 style="border-left: 4px solid #007bff; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">1. Unlisted App Distribution (Recommended for White-Label) ✅</h4>
+  <ul>
+    <li><strong>Cost</strong>: $99/year (Standard Developer Program)</li>
+    <li><strong>How it works</strong>: App is on App Store but <strong>not searchable</strong>. Only people with the direct link can find/download it</li>
+    <li><strong>Pros</strong>: No device limits, easy sharing via link, auto-updates, supports in-app purchases</li>
+    <li><strong>Cons</strong>: Requires App Store review, not truly private (anyone with link can download)</li>
+    <li><strong>Best for</strong>: White-label apps for clients, partners, BYOD scenarios ✅</li>
+  </ul>
+
+  <h4 style="border-left: 4px solid #28a745; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">2. Custom Apps (Apple Business Manager)</h4>
+  <ul>
+    <li><strong>Cost</strong>: $99/year + D-U-N-S number (free)</li>
+    <li><strong>How it works</strong>: Private apps distributed via redemption codes or MDM to specific organizations</li>
+    <li><strong>Pros</strong>: Completely private, unlimited users per org, silent MDM deployment, no user action for updates</li>
+    <li><strong>Cons</strong>: Requires Apple Business Manager, no in-app purchases via MDM, receiving org needs tech savvy</li>
+    <li><strong>Best for</strong>: Internal employee apps, B2B bespoke applications, partner/dealer apps</li>
+  </ul>
+
+  <h4 style="border-left: 4px solid #ffc107; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">3. Ad Hoc Distribution</h4>
+  <ul>
+    <li><strong>Cost</strong>: Included with $99/year Developer Program</li>
+    <li><strong>How it works</strong>: Share <code>.ipa</code> file directly; users install via Apple Configurator or direct install</li>
+    <li><strong>Pros</strong>: No App Store review needed, fastest path to device, works offline</li>
+    <li><strong>Cons</strong>: Max 100 devices/year, manual UDID registration, 1-year expiry (all apps stop working)</li>
+    <li><strong>Best for</strong>: In-person demos, hardware-specific testing, small team testing</li>
+  </ul>
+
+  <h4 style="border-left: 4px solid #17a2b8; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">4. TestFlight</h4>
+  <ul>
+    <li><strong>Cost</strong>: Included with $99/year Developer Program</li>
+    <li><strong>How it works</strong>: Invite testers via email or public link; testers use TestFlight app</li>
+    <li><strong>Pros</strong>: Up to 10,000 external testers, automatic updates, built-in crash reports & feedback</li>
+    <li><strong>Cons</strong>: First build requires Beta App Review, 90-day build expiration</li>
+    <li><strong>Best for</strong>: Beta testing before public release, gathering user feedback</li>
+  </ul>
+
+  <h4 style="border-left: 4px solid #dc3545; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">5. Apple Developer Enterprise Program</h4>
+  <ul>
+    <li><strong>Cost</strong>: $299/year</li>
+    <li><strong>How it works</strong>: Distribute internally to employees only; no App Review</li>
+    <li><strong>Pros</strong>: No App Review, instant deployment, complete control</li>
+    <li><strong>Cons</strong>: 3x cost, stringent eligibility, Apple actively discourages new enrollments, heavy compliance scrutiny</li>
+    <li><strong>Best for</strong>: Large organizations (100+ employees) with niche needs not addressable by Custom/Unlisted Apps</li>
+  </ul>
+
+  <h4 style="border-left: 4px solid #6c757d; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">6. Free Xcode Direct Deploy</h4>
+  <ul>
+    <li><strong>Cost</strong>: $0 (Free Apple ID)</li>
+    <li><strong>How it works</strong>: Connect iPhone to Mac via cable, open in Xcode, click Run (▶️)</li>
+    <li><strong>Pros</strong>: Completely free, no approval needed, instant testing</li>
+    <li><strong>Cons</strong>: App expires after 7 days, max 3 devices, requires cable/Wi-Fi connection to Mac</li>
+    <li><strong>Best for</strong>: Short-term testing during development</li>
+  </ul>
+
+  <h4>🔧 Third-Party Distribution Services</h4>
+  
+  <h4 style="border-left: 4px solid #6f42c1; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">1. Buildstash</h4>
+  <ul>
+    <li><strong>Best for</strong>: External clients, QA teams, cross-platform distribution</li>
+    <li><strong>Key feature</strong>: No tester accounts required - ideal for non-technical users</li>
+    <li><strong>Pros</strong>: Web uploader, branded portals, CI/CD integrations, binary archival</li>
+    <li><strong>Cons</strong>: Less mobile-specific focus</li>
+  </ul>
+
+  <h4 style="border-left: 4px solid #fd7e14; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">2. Firebase App Distribution</h4>
+  <ul>
+    <li><strong>Best for</strong>: Teams already using Firebase ecosystem</li>
+    <li><strong>Key feature</strong>: Free tier with Crashlytics integration</li>
+    <li><strong>Pros</strong>: Free, managed tester groups, email invites, release notes, crash reporting</li>
+    <li><strong>Cons</strong>: iOS provisioning is developer's responsibility, requires tester accounts</li>
+  </ul>
+
+  <h4 style="border-left: 4px solid #20c997; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">3. EAS (Expo Application Services)</h4>
+  <ul>
+    <li><strong>Best for</strong>: React Native / Expo projects only</li>
+    <li><strong>Key feature</strong>: Built specifically for Expo workflow</li>
+    <li><strong>Pros</strong>: Simple for Expo apps, integrated CI/CD, free tier available</li>
+    <li><strong>Cons</strong>: Only works with React Native/Expo apps</li>
+  </ul>
+
+  <h4 style="border-left: 4px solid #e83e8c; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">4. Applivery</h4>
+  <ul>
+    <li><strong>Best for</strong>: Enterprise with MDM needs</li>
+    <li><strong>Key feature</strong>: MDM integration + beta testing combined</li>
+    <li><strong>Pros</strong>: Enterprise governance, over-the-air updates, CI/CD integrations</li>
+    <li><strong>Cons</strong>: Expensive (€49/month), overkill for small teams</li>
+  </ul>
+
+  <h4 style="border-left: 4px solid #0d6efd; padding-left: 16px; margin-top: 20px; font-size: 1.3rem;">5. Appcircle</h4>
+  <ul>
+    <li><strong>Best for</strong>: Full CI/CD platform replacement</li>
+    <li><strong>Key feature</strong>: All-in-one build, test, distribute solution</li>
+    <li><strong>Pros</strong>: Complete App Center alternative, enterprise-grade, web dashboard</li>
+    <li><strong>Cons</strong>: Enterprise budget required, may be too heavy for smaller teams</li>
+  </ul>
+
+  <div class="note">
+    💡 <strong>Recommendation for White-Label Apps</strong>: Use <strong>Unlisted App Distribution</strong> ($99/year). Share private links with clients — they download from App Store (feels professional), no device limits, and automatic updates. The app doesn't appear in search results, keeping it private. For React Native/Expo projects like yours, consider <strong>EAS</strong> for streamlined builds with free tier testing.
+  </div>
+
+  <div class="note">
+    📊 <strong>Decision Flow</strong>: General Public → App Store | Beta Testing → TestFlight | Internal Business → Custom Apps (MDM) or Unlisted (BYOD) | Hardware Testing → Ad Hoc | External Clients → Unlisted App or Buildstash
+  </div>
+
+  <blockquote>
+    🚀 <strong>Bottom Line</strong>: Ideal for brands with shared purpose but distinct identity. Success hinges on alignment of core functionality.
+  </blockquote>
+
+  <div class="footer">
+    White-Label App Architecture Report • /Users/bagani/Desktop/rm-proj/white-label-app
+  </div>
+
+  <script>
+    (function() {
+      const wrapper = document.getElementById('diagramWrapper');
+      const img = document.getElementById('diagramImg');
+      const zoomInBtn = document.getElementById('zoomIn');
+      const zoomOutBtn = document.getElementById('zoomOut');
+      const zoomResetBtn = document.getElementById('zoomReset');
+      const zoomLevelDisplay = document.getElementById('zoomLevel');
+
+      let scale = 1;
+      let panning = false;
+      let pointX = 0, pointY = 0;
+      let startX = 0, startY = 0;
+      const minZoom = 0.25;
+      const maxZoom = 3;
+      const zoomStep = 0.25;
+
+      function updateTransform() {
+        img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+        zoomLevelDisplay.textContent = Math.round(scale * 100) + '%';
+      }
+
+      function zoomIn() {
+        if (scale < maxZoom) {
+          scale = Math.min(maxZoom, scale + zoomStep);
+          updateTransform();
+        }
+      }
+
+      function zoomOut() {
+        if (scale > minZoom) {
+          scale = Math.max(minZoom, scale - zoomStep);
+          updateTransform();
+        }
+      }
+
+      function resetZoom() {
+        scale = 1;
+        pointX = 0;
+        pointY = 0;
+        updateTransform();
+      }
+
+      // Button events
+      zoomInBtn.addEventListener('click', zoomIn);
+      zoomOutBtn.addEventListener('click', zoomOut);
+      zoomResetBtn.addEventListener('click', resetZoom);
+
+      // Mouse wheel zoom
+      wrapper.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+          zoomIn();
+        } else {
+          zoomOut();
+        }
+      }, { passive: false });
+
+      // Pan functionality
+      img.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        panning = true;
+        startX = e.clientX - pointX;
+        startY = e.clientY - pointY;
+        wrapper.style.cursor = 'grabbing';
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (!panning) return;
+        e.preventDefault();
+        pointX = e.clientX - startX;
+        pointY = e.clientY - startY;
+        updateTransform();
+      });
+
+      document.addEventListener('mouseup', function() {
+        panning = false;
+        wrapper.style.cursor = 'grab';
+      });
+
+      // Touch support for mobile
+      let lastTouchX = 0, lastTouchY = 0;
+      let initialPinchDistance = null;
+
+      wrapper.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 1) {
+          panning = true;
+          lastTouchX = e.touches[0].clientX;
+          lastTouchY = e.touches[0].clientY;
+        } else if (e.touches.length === 2) {
+          initialPinchDistance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+        }
+      });
+
+      wrapper.addEventListener('touchmove', function(e) {
+        if (e.touches.length === 1 && panning) {
+          e.preventDefault();
+          pointX += e.touches[0].clientX - lastTouchX;
+          pointY += e.touches[0].clientY - lastTouchY;
+          lastTouchX = e.touches[0].clientX;
+          lastTouchY = e.touches[0].clientY;
+          updateTransform();
+        } else if (e.touches.length === 2 && initialPinchDistance) {
+          e.preventDefault();
+          const currentDistance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          const delta = currentDistance - initialPinchDistance;
+          if (Math.abs(delta) > 5) {
+            scale += delta * 0.005;
+            scale = Math.max(minZoom, Math.min(maxZoom, scale));
+            updateTransform();
+            initialPinchDistance = currentDistance;
+          }
+        }
+      });
+
+      wrapper.addEventListener('touchend', function() {
+        panning = false;
+        initialPinchDistance = null;
+      });
+    })();
+  </script>
+</body>
+</html>
