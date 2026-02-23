@@ -1,8 +1,10 @@
 import React from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert ,Text} from "react-native";
 import BrandedHeader from "./src/components/branded/BrandedHeader";
 import BrandedButton from "./src/components/branded/BrandedButton";
 import BrandedFooter from "./src/components/branded/BrandedFooter";
+import './global.css'
+
 export default function HomeScreen() {
   const handleButtonPress = () => {
     Alert.alert(
@@ -14,14 +16,11 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <BrandedHeader title="Welcome" />
-      <View style={styles.content}>
-        <BrandedButton
-          title="Show Shared Codebase Info"
-          onPress={handleButtonPress}
-        />
-      </View>
-      <BrandedFooter />
+      <View className="flex-1 items-center justify-center bg-white">
+           <Text className="text-xl mt-20 font-bold text-blue-500">
+             Welcome to Nativewind!
+           </Text>
+         </View>
     </View>
   );
 }

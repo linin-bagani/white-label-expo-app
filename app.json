@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Brand Three",
-    "slug": "brand-three",
+    "name": "Brand One",
+    "slug": "brand-one",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "brandthree",
+    "scheme": "brandone",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -15,22 +15,23 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.brandthree.app"
+      "bundleIdentifier": "com.brandone.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.brandthree.app",
+      "package": "com.brandone.app",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "themeColor": "#FF0000",
+      "themeColor": "#00FF00",
       "logoPath": "./assets/logo.svg"
     }
   }
