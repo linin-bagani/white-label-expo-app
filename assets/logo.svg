@@ -1,13 +1,13 @@
 <svg width="200" height="100" xmlns="http://www.w3.org/2000/svg">
   <!-- Background -->
-  <rect width="100%" height="100%" fill="#f0f0f0" rx="10"/>
+  <rect width="100%" height="100%" fill="#e8f4fd" rx="10"/>
 
-  <!-- Brand One Logo -->
-  <text x="50%" y="55" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#007AFF" text-anchor="middle">
-    BRAND ONE
+  <!-- Brand Two Logo -->
+  <text x="50%" y="55" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ff6b6b" text-anchor="middle">
+    BRAND TWO
   </text>
 
   <!-- Decorative element -->
-  <circle cx="50" cy="30" r="15" fill="#007AFF" opacity="0.7"/>
-  <circle cx="150" cy="30" r="15" fill="#00FF00" opacity="0.7"/>
+  <rect x="40" y="15" width="30" height="30" fill="#ff6b6b" rx="5" transform="rotate(45 55 30)" />
+  <rect x="130" y="15" width="30" height="30" fill="#4ecdc4" rx="5" transform="rotate(45 145 30)" />
 </svg>

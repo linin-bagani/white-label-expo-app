@@ -7,7 +7,7 @@ const brand = process.argv[2] || "brand1";
 console.log(`Setting up configuration for ${brand}...`);
 
 // Define paths
-const configPath = path.join(__dirname, "app/config", brand);
+const configPath = path.join(__dirname, "src/app/config", brand);
 const appJsonPath = path.join(configPath, "app.json");
 const targetAppJsonPath = path.join(__dirname, "app.json");
 const assetsSourcePath = path.join(configPath, "assets");

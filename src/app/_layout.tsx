@@ -5,8 +5,8 @@ import { StatusBar, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { colorScheme } from "nativewind";
 import * as SplashScreen from "expo-splash-screen";
-import { LoadingProvider } from "../context/LoadingContext";
-import { StackBackProvider } from "../context/StackBackContext";
+import { LoadingProvider } from "../../context/LoadingContext";
+import { StackBackProvider } from "../../context/StackBackContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PortalHost } from "@rn-primitives/portal";
 import './global.css'

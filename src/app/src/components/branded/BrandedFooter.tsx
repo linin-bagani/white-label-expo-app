@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { getBrandContent } from "../../../../utils/brandUtils";
-import { useBrand } from "../../../../hooks/useBrand";
+import { getBrandContent } from "../../../../../utils/brandUtils";
+import { useBrand } from "../../../../../hooks/useBrand";
 interface BrandedFooterProps {
   style?: object;
 }

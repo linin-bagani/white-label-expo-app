@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { useBrand } from "../../../../hooks/useBrand";
+import { useBrand } from "../../../../../hooks/useBrand";
 
 interface BrandedButtonProps {
   title: string;

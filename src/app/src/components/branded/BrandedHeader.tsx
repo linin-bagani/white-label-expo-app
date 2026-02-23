@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import { useBrand } from "../../../../hooks/useBrand";
+import { useBrand } from "../../../../../hooks/useBrand";
 
 interface BrandedHeaderProps {
   title?: string;

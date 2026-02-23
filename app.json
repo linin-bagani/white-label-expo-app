@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Brand One",
-    "slug": "brand-one",
+    "name": "Brand Two",
+    "slug": "brand-two",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "brandone",
+    "scheme": "brandtwo",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -15,23 +15,22 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.brandone.app"
+      "bundleIdentifier": "com.brandtwo.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.brandone.app",
+      "package": "com.brandtwo.app",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "themeColor": "#00FF00",
+      "themeColor": "#FFA500",
       "logoPath": "./assets/logo.svg"
     }
   }

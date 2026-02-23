@@ -11,7 +11,8 @@ module.exports = function (api) {
         {
           extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
           alias: {
-            "@": "./",
+            "@rn-primitives/checkbox": "./node_modules/@rn-primitives/checkbox",
+            "@": "./src",
           },
         },
       ],
