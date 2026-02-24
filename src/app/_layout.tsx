@@ -5,11 +5,12 @@ import { StatusBar, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { colorScheme } from "nativewind";
 import * as SplashScreen from "expo-splash-screen";
-import { LoadingProvider } from "../../context/LoadingContext";
-import { StackBackProvider } from "../../context/StackBackContext";
+import { LoadingProvider } from "@/context/LoadingContext";
+import { StackBackProvider } from "../context/StackBackContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PortalHost } from "@rn-primitives/portal";
 import './global.css'
+import StackRoutes from "../components/routes/StackRoutes";
 
 colorScheme.set("dark");
 
@@ -64,9 +65,7 @@ export default function Layout() {
         <LoadingProvider>
           <StackBackProvider>
             <GestureHandlerRootView>
-              <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-              </Stack>
+              <StackRoutes />
               <PortalHost />
             </GestureHandlerRootView>
           </StackBackProvider>

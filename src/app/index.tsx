@@ -3,6 +3,7 @@ import { View, StyleSheet, Alert } from "react-native";
 import BrandedHeader from "./src/components/branded/BrandedHeader";
 import BrandedButton from "./src/components/branded/BrandedButton";
 import BrandedFooter from "./src/components/branded/BrandedFooter";
+import { Redirect } from "expo-router";
 export default function HomeScreen() {
   const handleButtonPress = () => {
     Alert.alert(
@@ -13,16 +14,17 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <BrandedHeader title="Welcome" />
-      <View style={styles.content}>
-        <BrandedButton
-          title="Show Shared Codebase Info"
-          onPress={handleButtonPress}
-        />
-      </View>
-      <BrandedFooter />
-    </View>
+    // <View style={styles.container}>
+    //   <BrandedHeader title="Welcome" />
+    //   <View style={styles.content}>
+    //     <BrandedButton
+    //       title="Show Shared Codebase Info"
+    //       onPress={handleButtonPress}
+    //     />
+    //   </View>
+    //   <BrandedFooter />
+    // </View>
+    <Redirect href='/login' />
   );
 }
 

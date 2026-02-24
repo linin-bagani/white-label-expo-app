@@ -9,6 +9,7 @@ module.exports = function (api) {
       [
         "module-resolver",
         {
+          root: ['./'],
           extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
           alias: {
             "@rn-primitives/checkbox": "./node_modules/@rn-primitives/checkbox",
