@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Theme, ThemeProvider } from "@react-navigation/native";
-import { Stack } from "expo-router";
 import { StatusBar, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { colorScheme } from "nativewind";
@@ -11,10 +10,55 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PortalHost } from "@rn-primitives/portal";
 import './global.css'
 import StackRoutes from "../components/routes/StackRoutes";
+import { useColorScheme } from '~/lib/useColorScheme';
+import { Switch } from '~/components/ui/switch';
+import { Label } from '~/components/ui/label';
+import { Link } from 'expo-router';
+import ForceUpdate from "@/components/ForceUpdate/ForceUpdate";
+
 
 colorScheme.set("dark");
 
 SplashScreen.preventAutoHideAsync();
+
+const DarkModeSwitcherDev = () => {
+  const { isDarkColorScheme, toggleColorScheme } = useColorScheme();
+
+  return (
+    <>
+      {__DEV__ && (
+        <View className={'bg-white flex-row w-full'}>
+          <View
+            className="flex-row gap-1 items-center mr-12"
+            style={{
+              bottom: 0,
+              left: 0,
+            }}>
+            <Switch
+              checked={isDarkColorScheme}
+              onCheckedChange={() => {
+                console.log('toggled 1');
+
+                toggleColorScheme();
+              }}
+            />
+            <Label
+              nativeID="dark-mode"
+              onPress={() => {
+                console.log('toggled');
+                toggleColorScheme();
+              }}>
+              Dark Mode Toggle
+            </Label>
+          </View>
+          <View>
+            <Link href={'/test'}>Test UI</Link>
+          </View>
+        </View>
+      )}
+    </>
+  );
+};
 
 export default function Layout() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -22,18 +66,18 @@ export default function Layout() {
   const DARK_THEME: Theme = {
     dark: false,
     colors: {
-      background: `#A855F7`,
-      border: `hsl(240 5.9% 90%`,
-      card: `hsl(0 0% 100%)`,
-      notification: `hsl(0 84.2% 60.2%)`,
-      primary: `#A855F7`,
-      text: `#ffffff`,
+      background: '#A855F7', // background
+      border: 'hsl(240 5.9% 90%)', // border
+      card: 'hsl(0 0% 100%)', // card
+      notification: 'hsl(0 84.2% 60.2%)', // destructive
+      primary: '#A855F7', // primary
+      text: '#ffffff', // foreground
     },
     fonts: {
-      regular: { fontFamily: "Inter", fontWeight: "400" },
-      medium: { fontFamily: "Inter", fontWeight: "500" },
-      bold: { fontFamily: "Inter", fontWeight: "700" },
-      heavy: { fontFamily: "Inter", fontWeight: "900" },
+      regular: { fontFamily: 'Inter', fontWeight: '400' },
+      medium: { fontFamily: 'Inter', fontWeight: '500' },
+      bold: { fontFamily: 'Inter', fontWeight: '700' },
+      heavy: { fontFamily: 'Inter', fontWeight: '900' },
     },
   };
 
@@ -65,8 +109,11 @@ export default function Layout() {
         <LoadingProvider>
           <StackBackProvider>
             <GestureHandlerRootView>
-              <StackRoutes />
+              <ForceUpdate>
+                <StackRoutes />
+              </ForceUpdate>
               <PortalHost />
+              <DarkModeSwitcherDev />
             </GestureHandlerRootView>
           </StackBackProvider>
         </LoadingProvider>

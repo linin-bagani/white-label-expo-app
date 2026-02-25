@@ -7,33 +7,34 @@ import { useColorScheme } from "~/lib/useColorScheme";
 const StackRoutes: FC = () => {
   const { back } = useStackBack();
   const { isDarkColorScheme } = useColorScheme();
+
   return (
     <Stack
       screenOptions={({ navigation }) => ({
         contentStyle: {
-          backgroundColor: "#ffff",
+          backgroundColor: '#ffff',
         },
         headerStyle: {
-          backgroundColor: isDarkColorScheme ? "#272525" : "#fafafa",
+          backgroundColor: isDarkColorScheme ? '#272525' : '#fafafa',
         },
         headerShadowVisible: false,
         headerShown: true,
-        animation: back ? "slide_from_left" : "slide_from_right",
+        animation: back ? 'slide_from_left' : 'slide_from_right',
         headerLeft: () => <BackButton navigation={navigation} />,
         gestureEnabled: false,
       })}
       initialRouteName="login"
     >
       <Stack.Screen
-        key={"index"}
-        name={"index"}
+        key={`index`}
+        name={'index'}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        key={"login"}
-        name={"login"}
+        key={`login`}
+        name={'login'}
         options={{
           headerShown: false,
         }}

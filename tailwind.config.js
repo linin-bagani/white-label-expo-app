@@ -4,7 +4,7 @@ module.exports = {
   // darkMode: 'selector',
   darkMode: 'class',
   presets: [require('nativewind/preset')],
-  content: ['./src/app/**/*.{ts,tsx}', './~/**/*.{ts,tsx}'],
+  content: ['./src/**/*.{ts,tsx}', './~/**/*.{ts,tsx}'],
   theme: {
     screens: {
       xr: '375px',
