@@ -7,6 +7,13 @@ A flexible white-label mobile application built with Expo and React Native that 
 - Single codebase supporting multiple brands
 - Dynamic configuration switching
 - Brand-specific assets and theming
+- Dark mode support with dev toggle
+- Force update mechanism
+- Comprehensive UI component library (28+ components)
+- 40+ custom SVG icons
+- GraphQL integration
+- Agent & property management utilities
+- Validation utilities
 - Modern React Native development with Expo
 - TypeScript support
 
@@ -40,30 +47,80 @@ This white-label app follows a configuration-driven approach where different bra
 
 ### Directory Structure
 ```
-white-label-app/
-├── App.tsx                    # Main App Component
-├── app.json                   # Expo configuration (dynamically replaced by build script)
-├── package.json               # Dependencies and build scripts
-├── build-brand.js             # Brand configuration setup script
-├── app/                      # Application source code
-│   ├── _layout.tsx           # Root layout (Stack navigator)
-│   ├── index.tsx             # Home screen component
-│   ├── config/               # Brand-specific configurations
-│   │   ├── brand1/           # Brand 1 configuration
-│   │   │   ├── app.json      # Brand 1 app config
-│   │   │   └── assets/       # Brand 1 assets
-│   │   ├── brand2/           # Brand 2 configuration
-│   │   └── brand3/           # Brand 3 configuration
-│   └── src/                  # Shared source code
-│       └── components/       # Reusable components
-│           ├── branded/      # Brand-specific components with conditional rendering
-│           └── ui/           # Generic UI components
-├── hooks/                    # Custom React hooks (outside app dir to avoid routing conflicts)
-│   └── useBrand.ts           # Hook to determine current brand
-└── utils/                    # Utility functions (outside app dir to avoid routing conflicts)
-    └── brandUtils.ts         # Brand-specific utilities
-├── assets/                   # Current active assets (dynamically copied)
+white-label-expo-app/
+├── src/
+│   ├── app/                      # Expo Router file-based routing
+│   │   ├── config/               # Brand configurations (brand1, brand2, brand3)
+│   │   │   └── brand{1,2,3}/
+│   │   │       ├── app.json      # Brand-specific Expo config
+│   │   │       └── assets/       # Brand-specific assets (icon, splash, logo, etc.)
+│   │   ├── src/
+│   │   │   └── components/branded/  # Brand-aware components
+│   │   │       ├── BrandedButton.tsx
+│   │   │       ├── BrandedHeader.tsx
+│   │   │       └── BrandedFooter.tsx
+│   │   ├── _layout.tsx           # Root layout with providers
+│   │   ├── index.tsx             # Home screen (redirects to /login)
+│   │   └── login.tsx             # Login page
+│   ├── components/               # Shared components
+│   │   ├── button/               # Button components with loading states
+│   │   ├── common/               # Common components (ErrorModal, etc.)
+│   │   ├── ForceUpdate/          # Force update component
+│   │   ├── navigation/           # Navigation components (BackButton, etc.)
+│   │   ├── routes/               # Route configurations (StackRoutes)
+│   │   ├── screens/              # Screen-specific components
+│   │   │   ├── signUp/          # Sign-up flow components
+│   │   │   └── searchAgents/    # Agent search components
+│   │   ├── searchAgents/         # Agent search utilities
+│   │   └── svg/                  # 40+ custom SVG icons
+│   ├── context/                  # React contexts
+│   │   ├── LoadingContext.tsx    # Loading state management
+│   │   └── StackBackContext.tsx  # Navigation back state management
+│   ├── pages/                    # Additional pages (common pages like Login)
+│   ├── constants/                # App constants
+│   ├── types/                    # TypeScript type definitions
+│   └── util/                     # Utility functions
+│       ├── agent.ts              # Agent-related utilities
+│       ├── property.ts           # Property utilities
+│       ├── validation.ts         # Validation utilities
+│       ├── graphql.ts            # GraphQL configuration
+│       ├── brief.ts              # Brief utilities
+│       ├── number.ts             # Number formatting utilities
+│       └── textSizeUtils.ts      # Text size calculations
+├── ~/                            # Path alias for shared UI components
+│   ├── components/ui/            # 28 reusable UI components
+│   │   ├── button.tsx, input.tsx, dialog.tsx, switch.tsx
+│   │   ├── accordion.tsx, tabs.tsx, select.tsx, dropdown-menu.tsx
+│   │   ├── card.tsx, badge.tsx, avatar.tsx, checkbox.tsx
+│   │   ├── datepicker.tsx, stepper.tsx, progress.tsx, textarea.tsx
+│   │   └── typography.tsx, separator.tsx, tooltip.tsx, modal.tsx, etc.
+│   └── lib/                      # Utility libraries
+│       ├── icons/                # Lucide icon wrappers
+│       └── useColorScheme.tsx    # Theme management
+├── hooks/
+│   └── useBrand.ts               # Brand detection hook (name, slug, theme)
+├── utils/
+│   └── brandUtils.ts             # Brand content & API utilities
+├── build-brand.js                # Brand configuration script
+├── assets/                       # Active brand assets (dynamically replaced)
+│   ├── icon.png, splash-icon.png, logo.svg
+│   ├── adaptive-icon.png, favicon.png
+├── App.tsx                       # App entry point (expo-router Slot)
+├── app.json                      # Expo configuration (replaced by build script)
+├── package.json                  # Dependencies and build scripts
+├── babel.config.js               # Babel config with path aliases (@, ~)
+├── tsconfig.json                 # TypeScript configuration
+└── tailwind.config.js            # Tailwind CSS configuration
 ```
+
+## 🔧 Path Aliases
+
+This project uses the following path aliases (configured in `babel.config.js` and `tsconfig.json`):
+
+| Alias | Maps To | Example |
+|-------|---------|---------|
+| `@/*` | `./src/*` | `import { x } from '@/components/button'` |
+| `~/*` | `./~/*` | `import { Button } from '~/components/ui/button'` |
 
 ## 🧪 Available Scripts
 
@@ -157,15 +214,45 @@ To configure brand-specific assets like logos, add them to the `extra` section o
 
 ## 📦 Dependencies
 
-- [Expo](https://expo.dev/) - Framework for universal React applications
-- [React Native](https://reactnative.dev/) - Framework for building native apps
-- [Expo Router](https://docs.expo.dev/router/introduction/) - File-based routing for React Native apps
-- [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript superset
-- [Expo Linking](https://docs.expo.dev/guides/linking/) - Deep linking capabilities
-- [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/) - Animated library for React Native
-- [React Native Web](https://github.com/necolas/react-native-web) - Compatibility layer for web
-- [React DOM](https://reactjs.org/docs/react-dom.html) - DOM-specific methods for React
-- [React Native Worklets](https://docs.swmansion.com/react-native-worklets/) - JavaScript execution runtime
+### Core
+- **[Expo](https://expo.dev/)** ~54.0.33 - Framework for universal React applications
+- **[React Native](https://reactnative.dev/)** 0.81.5 - Framework for building native apps
+- **[React](https://reactjs.org/)** 19.1.0 - UI library
+- **[Expo Router](https://docs.expo.dev/router/introduction/)** ^6.0.23 - File-based routing for React Native apps
+
+### Styling & UI
+- **[NativeWind](https://www.nativewind.dev/)** ^4.2.2 - Tailwind CSS for React Native
+- **[Tailwind CSS](https://tailwindcss.com/)** ^3.4.19 - Utility-first CSS framework
+- **@rn-primitives/\*** - Primitive UI components (avatar, dialog, dropdown-menu, switch, etc.)
+- **[lucide-react-native](https://lucide.dev/)** - Icon library
+
+### Navigation
+- **[@react-navigation/native](https://reactnavigation.org/)** ^7.1.8 - Navigation library
+- **[@react-navigation/native-stack](https://reactnavigation.org/docs/native-stack-navigator)** ^7.3.16 - Stack navigator
+
+### Forms & Validation
+- **[react-hook-form](https://react-hook-form.com/)** ^7.71.2 - Performant forms library
+- **[zod](https://zod.dev/)** ^4.3.6 - TypeScript-first schema validation
+- **[@hookform/resolvers](https://react-hook-form.com/get-started#SchemaValidation)** ^5.2.2 - Schema validation resolvers
+
+### State & Context
+- **React Context** - Built-in contexts (LoadingContext, StackBackContext)
+
+### Utilities
+- **[class-variance-authority](https://cva.style/)** ^0.7.1 - Component variants
+- **[tailwind-merge](https://github.com/dcastil/tailwind-merge)** ^3.5.0 - Tailwind class merging
+- **[clsx](https://github.com/lukeed/clsx)** ^2.1.1 - Conditional classnames
+- **[prettier-plugin-tailwindcss](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)** - Prettier plugin
+
+### TypeScript & Build
+- **[TypeScript](https://www.typescriptlang.org/)** ~5.9.2 - Typed JavaScript superset
+- **[babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver)** - Path aliases
+
+### Other Notable Dependencies
+- **[React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)** ~4.1.1 - Animation library
+- **[React Native Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/)** ~2.28.0 - Native gesture recognition
+- **[React Native SVG](https://github.com/react-native-svg/react-native-svg)** 15.12.1 - SVG support
+- **[Expo Updates](https://docs.expo.dev/develop/updates/introduction/)** ~29.0.16 - OTA updates
 
 ## 🤝 Contributing
 
@@ -186,3 +273,32 @@ If you encounter any issues, please open an issue on the GitHub repository with 
 ## 🆘 Support
 
 For support, please open an issue in the repository or contact the maintainers.
+
+---
+
+## 📚 Developer Guides
+
+### For New Team Members
+
+| Guide | Purpose |
+|-------|---------|
+| **[ARCHITECTURE_GUIDE.md](./ARCHITECTURE_GUIDE.md)** | ⭐ **Start here** - Complete guide to working with the white-label system |
+| [WHITE_LABEL_IMPLEMENTATION.md](./WHITE_LABEL_IMPLEMENTATION.md) | Implementation details and what was updated |
+| [presentation-slide.md](./presentation-slide.md) | High-level architecture overview |
+| [LOGO_CUSTOMIZATION_GUIDE.md](./LOGO_CUSTOMIZATION_GUIDE.md) | 🎨 How to customize brand logos |
+| [PRODUCTION_BUILD_GUIDE.md](./PRODUCTION_BUILD_GUIDE.md) | 🚀 Build & deploy to App Store/Play Store |
+| [BUILD_COMMANDS_CHEATSHEET.md](./BUILD_COMMANDS_CHEATSHEET.md) | ⚡ Quick reference for build commands |
+
+### Quick Reference
+
+**Adding a new brand?** → See [ARCHITECTURE_GUIDE.md - Adding a New Brand](./ARCHITECTURE_GUIDE.md#-adding-a-new-brand)
+
+**Where to add brand-specific data?** → See [ARCHITECTURE_GUIDE.md - Where to Add Brand-Specific Data](./ARCHITECTURE_GUIDE.md#-where-to-add-brand-specific-data)
+
+**Need common patterns?** → See [ARCHITECTURE_GUIDE.md - Common Patterns](./ARCHITECTURE_GUIDE.md#-common-patterns)
+
+**Customizing logos?** → See [LOGO_CUSTOMIZATION_GUIDE.md](./LOGO_CUSTOMIZATION_GUIDE.md)
+
+**Building for production?** → See [PRODUCTION_BUILD_GUIDE.md](./PRODUCTION_BUILD_GUIDE.md)
+
+**Need build commands?** → See [BUILD_COMMANDS_CHEATSHEET.md](./BUILD_COMMANDS_CHEATSHEET.md)

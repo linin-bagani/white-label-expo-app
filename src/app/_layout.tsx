@@ -11,6 +11,7 @@ import { PortalHost } from "@rn-primitives/portal";
 import './global.css'
 import StackRoutes from "../components/routes/StackRoutes";
 import { useColorScheme } from '~/lib/useColorScheme';
+import { useBrand } from "hooks/useBrand";
 import { Switch } from '~/components/ui/switch';
 import { Label } from '~/components/ui/label';
 import { Link } from 'expo-router';
@@ -23,6 +24,7 @@ SplashScreen.preventAutoHideAsync();
 
 const DarkModeSwitcherDev = () => {
   const { isDarkColorScheme, toggleColorScheme } = useColorScheme();
+  const { themeColor } = useBrand();
 
   return (
     <>
@@ -62,6 +64,7 @@ const DarkModeSwitcherDev = () => {
 
 export default function Layout() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const { themeColor } = useBrand();
 
   const DARK_THEME: Theme = {
     dark: false,
@@ -70,7 +73,7 @@ export default function Layout() {
       border: 'hsl(240 5.9% 90%)', // border
       card: 'hsl(0 0% 100%)', // card
       notification: 'hsl(0 84.2% 60.2%)', // destructive
-      primary: '#A855F7', // primary
+      primary: themeColor, // Brand theme color
       text: '#ffffff', // foreground
     },
     fonts: {

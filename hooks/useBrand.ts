@@ -1,4 +1,4 @@
-import Constants from "expo-constants";
+  import Constants from "expo-constants";
 
 export type BrandName = "Brand One" | "Brand Two" | "Brand Three";
 

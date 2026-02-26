@@ -7,12 +7,17 @@ import { SignInTypes } from '@/constants/SignIn';
 import ErrorModal from '@/components/common/ErrorModal';
 import Logo from '@/components/svg/Logo';
 import { useTheme } from '@react-navigation/native';
+import { useBrand } from 'hooks/useBrand';
+import { getBrandContent } from 'utils/brandUtils';
 import MobileForm from './Login/components/MobileForm';
 import { useColorScheme } from '~/lib/useColorScheme';
 
 const Login: FC = () => {
   const { colors } = useTheme();
   const { isDarkColorScheme } = useColorScheme();
+  const { brandName, themeColor } = useBrand();
+  const { welcomeMessage } = getBrandContent(brandName);
+
   // const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false);
   const [isShowErrorModal, setIsShowErrorModal] = useState(false);
   const [errorMessage] = useState<string>('');
@@ -25,12 +30,14 @@ const Login: FC = () => {
         <View className='gap-3 dark p-6'>
           <View className="gap-[32px]">
             <View>
-              <Logo color={colors.primary} textColor={isDarkColorScheme ? 'white' : '#0C0B48'} />
+              <Logo color={colors.primary} useBrandLogo={true}
+              textColor={isDarkColorScheme ? '#eae8e6' : '#282522'}
+              />
             </View>
             <Text
               className={`text-3xl pb-8 font-semibold dark:text-foreground-light text-foreground-dark`}
               >
-              Welcome
+              {welcomeMessage}
             </Text>
           </View>
         </View>

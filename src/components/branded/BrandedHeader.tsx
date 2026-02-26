@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import { useBrand } from "../../../../../hooks/useBrand";
+import { useBrand } from "../../../hooks/useBrand";
 
 interface BrandedHeaderProps {
   title?: string;
@@ -20,12 +20,8 @@ const BrandedHeader: React.FC<BrandedHeaderProps> = ({ title = "Welcome" }) => {
           <View style={styles.headerContainer}>
             {logoPath && !isSvg && (
               <Image
-                source={{ uri: logoPath }}
+                source={require("../../../assets/icon.png")}
                 style={styles.logo}
-                onError={(e) =>
-                  console.warn("Error loading logo:", e.nativeEvent.error)
-                }
-                onLoadStart={() => console.log("Loading logo...")}
               />
             )}
             {logoPath && isSvg && (
@@ -59,12 +55,8 @@ const BrandedHeader: React.FC<BrandedHeaderProps> = ({ title = "Welcome" }) => {
           <View style={styles.headerContainer}>
             {logoPath && !isSvg && (
               <Image
-                source={{ uri: logoPath }}
+                source={require("../../../assets/icon.png")}
                 style={styles.logo}
-                onError={(e) =>
-                  console.warn("Error loading logo:", e.nativeEvent.error)
-                }
-                onLoadStart={() => console.log("Loading logo...")}
               />
             )}
             {logoPath && isSvg && (

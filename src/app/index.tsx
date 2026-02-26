@@ -1,8 +1,8 @@
 import React from "react";
 import { View, StyleSheet, Alert } from "react-native";
-import BrandedHeader from "./src/components/branded/BrandedHeader";
-import BrandedButton from "./src/components/branded/BrandedButton";
-import BrandedFooter from "./src/components/branded/BrandedFooter";
+import BrandedHeader from "@/components/branded/BrandedHeader";
+import BrandedButton from "@/components/branded/BrandedButton";
+import BrandedFooter from "@/components/branded/BrandedFooter";
 import { Redirect } from "expo-router";
 export default function HomeScreen() {
   const handleButtonPress = () => {

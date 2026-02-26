@@ -13,17 +13,17 @@ export const getBrandContent = (brandName: BrandName) => {
     }
   > = {
     "Brand One": {
-      welcomeMessage: "Welcome to Brand One!",
+      welcomeMessage: "Welcome to Homeowner app.",
       features: ["Feature A", "Feature B", "Feature C"],
       footerText: "© Brand One 2026",
     },
     "Brand Two": {
-      welcomeMessage: "Experience Premium with Brand Two",
+      welcomeMessage: "Experience Premium with Realty co.",
       features: ["Premium Feature X", "Premium Feature Y", "Premium Feature Z"],
       footerText: "© Brand Two Premium Services",
     },
     "Brand Three": {
-      welcomeMessage: "Exclusive Access to Brand Three",
+      welcomeMessage: "Exclusive Access to Housing",
       features: [
         "Exclusive Feature 1",
         "Exclusive Feature 2",

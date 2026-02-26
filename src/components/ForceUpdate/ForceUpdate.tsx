@@ -7,6 +7,7 @@ import { Dialog, DialogClose, DialogContent, DialogFooter } from '~/components/u
 import { Label } from '~/components/ui/label';
 import { Text } from '~/components/ui/text';
 import { Button } from '~/components/ui/button-2';
+import { useBrand } from 'hooks/useBrand';
 import UpgradeNow from '@/components/svg/UpgradeNow';
 
 // import { useAppVersionByNameQuery } from '@/operations/__generated__/AppVersion.generated';
@@ -16,6 +17,7 @@ const ForceUpdate = (props: { children: React.ReactNode }) => {
   const [versionStatus, setVersionStatus] = useState<'loading' | 'updated' | 'unupdated'>(
     'updated',
   );
+  const { themeColor } = useBrand();
 
   // useAppVersionByNameQuery({
   //   variables: {
@@ -62,10 +64,11 @@ const ForceUpdate = (props: { children: React.ReactNode }) => {
             <View className="gap-8">
               <View className="gap-[19px] items-center">
                 <View className="items-center gap-6">
-                  <UpgradeNow />
+                  <UpgradeNow color={themeColor} />
                   <Label
                     nativeID="upgrade-now-label"
-                    className="font-bold is414:text-[22px] is320:text-2xl is375:text-[22px] is390:text-[22px] is428:text-2xl is430:text-2xl text-foreground">
+                    className="font-bold is414:text-[22px] is320:text-2xl is375:text-[22px] is390:text-[22px] is428:text-2xl is430:text-2xl text-foreground"
+                    style={{ color: themeColor }}>
                     Upgrade Now
                   </Label>
                 </View>
@@ -89,6 +92,7 @@ const ForceUpdate = (props: { children: React.ReactNode }) => {
               <Button
                 size={'lg'}
                 className="w-full"
+                style={{ backgroundColor: themeColor }}
                 onPress={async () => {
                   if (Platform.OS === 'ios') {
                     Linking.openURL('https://apps.apple.com/us/app/homeowner/id6742207349');

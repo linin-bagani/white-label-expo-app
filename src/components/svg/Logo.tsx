@@ -1,11 +1,16 @@
 import Svg, { ClipPath, Defs, G, Path, Rect, SvgProps } from 'react-native-svg';
+import { useBrand } from 'hooks/useBrand';
+import { View, Text, StyleSheet } from 'react-native';
+import RealtyLogo from './RealtyLogo';
+import HousingLogo from './HousingLogo';
 
 type Props = SvgProps & {
   textColor?: string;
+  useBrandLogo?: boolean; // If true, will use brand logo from config
 };
 
-export default function Logo(props: Props) {
-  const { textColor = 'white', ...rest } = props;
+// Default SVG Logo (Realty Media Group style)
+function DefaultLogoSvg({ textColor = 'white', ...rest }: Props) {
   return (
     <Svg width="164" height="30" viewBox="0 0 164 30" fill="none" {...rest}>
       <G clip-path="url(#clip0_21_311)">
@@ -62,3 +67,73 @@ export default function Logo(props: Props) {
     </Svg>
   );
 }
+
+export default function Logo(props: Props) {
+  const { textColor = 'white', useBrandLogo = false, ...rest } = props;
+  const { brandName } = useBrand();
+
+  // If useBrandLogo is true, use brand-specific text logos
+  if (useBrandLogo) {
+    // Use text-based logos for each brand
+    switch (brandName) {
+      case 'Brand Two':
+        return <RealtyLogo textColor={textColor} {...rest} />;
+      case 'Brand Three':
+        return <HousingLogo textColor={textColor} {...rest} />;
+      case 'Brand One':
+      default:
+        // For Brand One, keep the original logo
+        return <DefaultLogoSvg textColor={textColor} {...rest} />;
+    }
+  }
+
+  // Default: use the default SVG logo
+  return <DefaultLogoSvg textColor={textColor} {...rest} />;
+}
+
+const styles = StyleSheet.create({
+  logoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+/**
+ * LOGO COMPONENT GUIDE
+ * ====================
+ * 
+ * This logo system automatically displays different logos based on the current brand:
+ * 
+ * BRAND MAPPING:
+ * --------------
+ * Brand One (Default)   → Original SVG logo (HOMEOWNER text)
+ * Brand Two (Realty)    → Text-based logo (REALTY text)
+ * Brand Three (Housing) → Text-based logo (HOUSING text)
+ * 
+ * USAGE:
+ * ------
+ * // Use default logo (Brand One style)
+ * <Logo />
+ * 
+ * // Use brand-specific logo (recommended)
+ * <Logo useBrandLogo={true} textColor={themeColor} />
+ * 
+ * CUSTOMIZATION:
+ * --------------
+ * To change Brand Two (Realty) logo text:
+ *   → Edit src/components/svg/RealtyLogo.tsx, line 20
+ * 
+ * To change Brand Three (Housing) logo text:
+ *   → Edit src/components/svg/HousingLogo.tsx, line 20
+ * 
+ * To change Brand One logo:
+ *   → Edit the DefaultLogoSvg function in this file (lines 11-68)
+ *   → Note: Brand One uses vector paths, not text (harder to edit)
+ *   → For production, replace with custom SVG/PNG logo files
+ * 
+ * EXAMPLE - Change "REALTY" to "PROPERTIES":
+ * 1. Open src/components/svg/RealtyLogo.tsx
+ * 2. Find line 20: <SvgText ...>REALTY</SvgText>
+ * 3. Change to: <SvgText ...>PROPERTIES</SvgText>
+ * 4. Save and reload
+ */

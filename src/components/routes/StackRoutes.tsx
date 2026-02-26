@@ -3,10 +3,12 @@ import { Stack } from "expo-router";
 import { useStackBack } from '@/context/StackBackContext';
 import BackButton from "../navigation/BackButton/BackButton";
 import { useColorScheme } from "~/lib/useColorScheme";
+import { useBrand } from "hooks/useBrand";
 
 const StackRoutes: FC = () => {
   const { back } = useStackBack();
   const { isDarkColorScheme } = useColorScheme();
+  const { themeColor } = useBrand();
 
   return (
     <Stack
@@ -15,7 +17,7 @@ const StackRoutes: FC = () => {
           backgroundColor: '#ffff',
         },
         headerStyle: {
-          backgroundColor: isDarkColorScheme ? '#272525' : '#fafafa',
+          backgroundColor: isDarkColorScheme ? '#272525' : themeColor,
         },
         headerShadowVisible: false,
         headerShown: true,
